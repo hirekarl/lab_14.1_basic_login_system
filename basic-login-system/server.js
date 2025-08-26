@@ -5,14 +5,17 @@ const userRoutes = require("./routes/userRoutes")
 
 const { PORT } = require("./utils")
 
-const app = express()
+const run = async () => {
+  await connect()
 
-app.use(express.json())
+  const app = express()
 
-app.use("/api/users", userRoutes)
+  app.use(express.json())
+  app.use("/api/users", userRoutes)
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}.`)
-})
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}.`)
+  })
+}
 
-connect()
+run()
