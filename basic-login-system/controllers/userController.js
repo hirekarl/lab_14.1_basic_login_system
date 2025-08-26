@@ -1,9 +1,12 @@
+const jwt = require("jsonwebtoken")
+
+const { JWT_SECRET, JWT_EXPIRY } = require("../utils")
+
 const User = require("../models/User")
 
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body
-
     const foundUser = User.findOne({ email: email })
 
     if (foundUser) {
@@ -17,23 +20,43 @@ const register = async (req, res) => {
         password: password,
       })
 
-      const newUserWithoutPassword = await User.findById(newUser._id).select(
-        "-password"
-      )
-
-      res.status(201).json(newUserWithoutPassword)
+      res.status(201).json(newUser)
     }
   } catch (error) {
-    console.log(error)
-    res.status(400).json({ error: message })
+    console.error(error)
+    res.status(400).json({ error: error.message })
   }
 }
 
 const login = async (req, res) => {
   try {
+    const { email, password } = req.body
+    const foundUser = await User.findOne({ email: email })
+
+    if (!foundUser) {
+      return res.status(401).json({ error: "Incorrect email or password." })
+    }
+
+    const passwordIsCorrect = await foundUser.isCorrectPassword(password)
+
+    if (!passwordIsCorrect) {
+      return res.status(401).json({ error: "Incorrect email or password." })
+    }
+
+    const payload = {
+      _id: foundUser._id,
+      username: foundUser.username,
+      email: foundUser.email,
+    }
+
+    const token = jwt.sign({ data: payload }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRY,
+    })
+
+    res.json({ token, foundUser })
   } catch (error) {
-    console.log(error)
-    res.sendStatus(400)
+    console.error(error)
+    res.status(400).json({ error: error.message })
   }
 }
 
