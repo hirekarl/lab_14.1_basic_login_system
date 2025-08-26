@@ -3,7 +3,7 @@ const express = require("express")
 const connect = require("./db/connect")
 const userRoutes = require("./routes/userRoutes")
 
-const PORT = require("./utils")
+const { PORT } = require("./utils")
 
 const app = express()
 
