@@ -7,7 +7,7 @@ const User = require("../models/User")
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body
-    const foundUser = User.findOne({ email: email })
+    const foundUser = await User.findOne({ email: email })
 
     if (foundUser) {
       res
@@ -53,7 +53,7 @@ const login = async (req, res) => {
       expiresIn: JWT_EXPIRY,
     })
 
-    res.json({ token, foundUser })
+    res.json({ token, user: foundUser })
   } catch (error) {
     console.error(error)
     res.status(400).json({ error: error.message })
