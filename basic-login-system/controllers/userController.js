@@ -53,7 +53,7 @@ const login = async (req, res) => {
       expiresIn: JWT_EXPIRY,
     })
 
-    res.json({ token, user: foundUser })
+    res.json({ token: token, user: foundUser })
   } catch (error) {
     console.error(error)
     res.status(400).json({ error: error.message })
