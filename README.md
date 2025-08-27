@@ -20,7 +20,7 @@ cd basic-login-system && npm i && npm run dev
 Top-level application behavior can be found in [`./basic-login-system/server.js`](./basic-login-system/server.js).
 
 ### Reflection
-> TODO
+> When an attempt is made to create a user that already exists, the server sends an [`HTTP 409 Conflict`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/409). To keep the app from sending the user's password hash back to them on user creation, I implemented the `toJSON` method on the `userSchema`.
 
 ## Assignment
 The user portal for “Innovate Inc.” needs its core authentication feature. Before you can build out more complex functionality, you need to create the fundamental endpoints for user registration and login. Your task is to build a simple Express API that can:
