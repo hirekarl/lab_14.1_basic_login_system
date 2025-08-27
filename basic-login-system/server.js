@@ -3,13 +3,14 @@ const express = require("express")
 const connect = require("./db/connect")
 const userRoutes = require("./routes/userRoutes")
 
-const { PORT } = require("./utils")
+const { STATIC_ROOT, PORT } = require("./utils")
 
 const run = async () => {
   await connect()
 
   const app = express()
 
+  app.use(express.static(STATIC_ROOT))
   app.use(express.json())
   app.use("/api/users", userRoutes)
 
